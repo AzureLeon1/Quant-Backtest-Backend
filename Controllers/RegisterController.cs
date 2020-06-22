@@ -50,8 +50,8 @@ namespace Quant_BackTest_Backend.Controllers
 
             var body = JsonConverter.Decode(json);
 
-            var user_id = body["User"];
-            var password = body["Password"];
+            var user_id = body["user"];
+            var password = body["password"];
 
             if (ctx.user.Any(_user => _user.user_id == user_id)) {
                 return "fail";  // 用户已存在
