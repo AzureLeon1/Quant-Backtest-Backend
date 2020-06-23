@@ -5,6 +5,7 @@ using System.Web;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+
 namespace Quant_BackTest_Backend.BackTestEngine {
     public class EngineRunner {
         //调用python核心代码
@@ -66,6 +67,8 @@ namespace Quant_BackTest_Backend.BackTestEngine {
         public delegate void AppendTextCallback(string text);
         public static void AppendText(string text) {
             Console.WriteLine(text);     //此处在控制台输出.py文件print的结果
+            // 添加到消息队列
+
 
         }
     }

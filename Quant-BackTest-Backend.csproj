@@ -219,6 +219,7 @@
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\WebSocketBacktestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -253,6 +254,7 @@
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserIns.cs" />
+    <Compile Include="MyWebSocket\MyWebSocketHandler.cs" />
     <Compile Include="NameHash\HashOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
