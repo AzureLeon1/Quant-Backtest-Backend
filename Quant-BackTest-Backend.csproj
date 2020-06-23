@@ -211,6 +211,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="BackTestEngine\EngineRunner.cs" />
+    <Compile Include="BackTestEngine\EngineUtils.cs" />
+    <Compile Include="Controllers\BacktestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -224,6 +227,7 @@
     <Compile Include="Models\backtest.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BacktestResult.cs" />
     <Compile Include="Models\data.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
