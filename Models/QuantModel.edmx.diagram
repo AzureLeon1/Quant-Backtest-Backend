@@ -4,11 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a79515a939b04459a6533eb56bf7719f" Name="Diagram1">
-        <EntityTypeShape EntityType="quantModel.backtest" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="quantModel.data" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="quantModel.strategy" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="quantModel.user" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+      <Diagram DiagramId="9f05698f7e724d9589c94bd4d2fb7685" Name="Diagram1">
+        <EntityTypeShape EntityType="quantModel.backtest" Width="1.5" PointX="5.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="quantModel.data" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="quantModel.strategy" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="quantModel.user" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
+        <AssociationConnector Association="quantModel.backtest_data_data_id_fk" ManuallyRouted="false" />
         <AssociationConnector Association="quantModel.backtest_strategy_strategy_id_fk" ManuallyRouted="false" />
         <AssociationConnector Association="quantModel.data_user_user_id_fk" ManuallyRouted="false" />
         <AssociationConnector Association="quantModel.strategy_user_user_id_fk" ManuallyRouted="false" />

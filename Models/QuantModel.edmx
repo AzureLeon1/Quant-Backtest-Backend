@@ -9,9 +9,9 @@
           <Key>
             <PropertyRef Name="backtest_id" />
           </Key>
-          <Property Name="backtest_id" Type="int" Nullable="false" />
+          <Property Name="backtest_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="strategy_id" Type="int" />
-          <Property Name="time" Type="datetime" Precision="0" />
+          <Property Name="time" Type="varchar" MaxLength="255" />
           <Property Name="data_id" Type="int" />
           <Property Name="sy" Type="float" />
           <Property Name="nsy" Type="float" />
@@ -24,7 +24,7 @@
           <Key>
             <PropertyRef Name="data_id" />
           </Key>
-          <Property Name="data_id" Type="int" Nullable="false" />
+          <Property Name="data_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="data_path" Type="varchar" MaxLength="255" />
           <Property Name="data_type" Type="int" />
           <Property Name="user_id" Type="varchar" MaxLength="255" />
@@ -33,9 +33,9 @@
           <Key>
             <PropertyRef Name="strategy_id" />
           </Key>
-          <Property Name="strategy_id" Type="int" Nullable="false" />
+          <Property Name="strategy_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="strategy_name" Type="varchar" MaxLength="255" />
-          <Property Name="create_time" Type="datetime" Precision="0" />
+          <Property Name="create_time" Type="varchar" MaxLength="255" />
           <Property Name="user_id" Type="varchar" MaxLength="255" />
           <Property Name="strategy_hash" Type="varchar" MaxLength="255" />
         </EntityType>
@@ -46,6 +46,18 @@
           <Property Name="user_id" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
+        <Association Name="backtest_data_data_id_fk">
+          <End Role="data" Type="Self.data" Multiplicity="0..1" />
+          <End Role="backtest" Type="Self.backtest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data">
+              <PropertyRef Name="data_id" />
+            </Principal>
+            <Dependent Role="backtest">
+              <PropertyRef Name="data_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="backtest_strategy_strategy_id_fk">
           <End Role="strategy" Type="Self.strategy" Multiplicity="0..1" />
           <End Role="backtest" Type="Self.backtest" Multiplicity="*" />
@@ -87,6 +99,10 @@
           <EntitySet Name="data" EntityType="Self.data" Schema="quant" store:Type="Tables" />
           <EntitySet Name="strategy" EntityType="Self.strategy" Schema="quant" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="quant" store:Type="Tables" />
+          <AssociationSet Name="backtest_data_data_id_fk" Association="Self.backtest_data_data_id_fk">
+            <End Role="data" EntitySet="data" />
+            <End Role="backtest" EntitySet="backtest" />
+          </AssociationSet>
           <AssociationSet Name="backtest_strategy_strategy_id_fk" Association="Self.backtest_strategy_strategy_id_fk">
             <End Role="strategy" EntitySet="strategy" />
             <End Role="backtest" EntitySet="backtest" />
@@ -109,9 +125,9 @@
           <Key>
             <PropertyRef Name="backtest_id" />
           </Key>
-          <Property Name="backtest_id" Type="Int32" Nullable="false" />
+          <Property Name="backtest_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="strategy_id" Type="Int32" />
-          <Property Name="time" Type="DateTime" />
+          <Property Name="time" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="data_id" Type="Int32" />
           <Property Name="sy" Type="Single" />
           <Property Name="nsy" Type="Single" />
@@ -119,25 +135,27 @@
           <Property Name="xp" Type="Single" />
           <Property Name="sx" Type="Single" />
           <Property Name="report_path" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="data" Relationship="Self.backtest_data_data_id_fk" FromRole="backtest" ToRole="data" />
           <NavigationProperty Name="strategy" Relationship="Self.backtest_strategy_strategy_id_fk" FromRole="backtest" ToRole="strategy" />
         </EntityType>
         <EntityType Name="data">
           <Key>
             <PropertyRef Name="data_id" />
           </Key>
-          <Property Name="data_id" Type="Int32" Nullable="false" />
+          <Property Name="data_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="data_path" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="data_type" Type="Int32" />
           <Property Name="user_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="backtest" Relationship="Self.backtest_data_data_id_fk" FromRole="data" ToRole="backtest" />
           <NavigationProperty Name="user" Relationship="Self.data_user_user_id_fk" FromRole="data" ToRole="user" />
         </EntityType>
         <EntityType Name="strategy">
           <Key>
             <PropertyRef Name="strategy_id" />
           </Key>
-          <Property Name="strategy_id" Type="Int32" Nullable="false" />
+          <Property Name="strategy_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="strategy_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="create_time" Type="DateTime" />
+          <Property Name="create_time" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="user_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="strategy_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="backtest" Relationship="Self.backtest_strategy_strategy_id_fk" FromRole="strategy" ToRole="backtest" />
@@ -152,6 +170,18 @@
           <NavigationProperty Name="data" Relationship="Self.data_user_user_id_fk" FromRole="user" ToRole="data" />
           <NavigationProperty Name="strategy" Relationship="Self.strategy_user_user_id_fk" FromRole="user" ToRole="strategy" />
         </EntityType>
+        <Association Name="backtest_data_data_id_fk">
+          <End Role="data" Type="Self.data" Multiplicity="0..1" />
+          <End Role="backtest" Type="Self.backtest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data">
+              <PropertyRef Name="data_id" />
+            </Principal>
+            <Dependent Role="backtest">
+              <PropertyRef Name="data_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="backtest_strategy_strategy_id_fk">
           <End Role="strategy" Type="Self.strategy" Multiplicity="0..1" />
           <End Role="backtest" Type="Self.backtest" Multiplicity="*" />
@@ -193,6 +223,10 @@
           <EntitySet Name="data" EntityType="Self.data" />
           <EntitySet Name="strategy" EntityType="Self.strategy" />
           <EntitySet Name="user" EntityType="Self.user" />
+          <AssociationSet Name="backtest_data_data_id_fk" Association="Self.backtest_data_data_id_fk">
+            <End Role="data" EntitySet="data" />
+            <End Role="backtest" EntitySet="backtest" />
+          </AssociationSet>
           <AssociationSet Name="backtest_strategy_strategy_id_fk" Association="Self.backtest_strategy_strategy_id_fk">
             <End Role="strategy" EntitySet="strategy" />
             <End Role="backtest" EntitySet="backtest" />

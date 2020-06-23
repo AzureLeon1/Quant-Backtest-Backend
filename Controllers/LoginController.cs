@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Quant_BackTest_Backend.Models;
-using System.ComponentModel.Design;
 using Quant_BackTest_Backend.Helper;
 
 namespace Quant_BackTest_Backend.Controllers

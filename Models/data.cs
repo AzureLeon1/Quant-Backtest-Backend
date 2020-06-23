@@ -14,11 +14,19 @@ namespace Quant_BackTest_Backend.Models
     
     public partial class data
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public data()
+        {
+            this.backtest = new HashSet<backtest>();
+        }
+    
         public int data_id { get; set; }
         public string data_path { get; set; }
         public Nullable<int> data_type { get; set; }
         public string user_id { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<backtest> backtest { get; set; }
         public virtual user user { get; set; }
     }
 }

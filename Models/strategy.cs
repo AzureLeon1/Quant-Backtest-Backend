@@ -22,7 +22,7 @@ namespace Quant_BackTest_Backend.Models
     
         public int strategy_id { get; set; }
         public string strategy_name { get; set; }
-        public Nullable<System.DateTime> create_time { get; set; }
+        public string create_time { get; set; }
         public string user_id { get; set; }
         public string strategy_hash { get; set; }
     

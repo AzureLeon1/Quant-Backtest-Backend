@@ -16,7 +16,7 @@ namespace Quant_BackTest_Backend.Models
     {
         public int backtest_id { get; set; }
         public Nullable<int> strategy_id { get; set; }
-        public Nullable<System.DateTime> time { get; set; }
+        public string time { get; set; }
         public Nullable<int> data_id { get; set; }
         public Nullable<float> sy { get; set; }
         public Nullable<float> nsy { get; set; }
@@ -25,6 +25,7 @@ namespace Quant_BackTest_Backend.Models
         public Nullable<float> sx { get; set; }
         public string report_path { get; set; }
     
+        public virtual data data { get; set; }
         public virtual strategy strategy { get; set; }
     }
 }
