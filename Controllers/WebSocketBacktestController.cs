@@ -14,6 +14,8 @@ using System.Web.Http.Cors;
 using NetMQ;
 using NetMQ.Sockets;
 using Quant_BackTest_Backend.BackTestEngine;
+using Quant_BackTest_Backend.Models;
+using Quant_BackTest_Backend.WebSocketUtils;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -22,6 +24,8 @@ namespace Quant_BackTest_Backend.Controllers
     [RoutePrefix("api/wsbacktest")]
     public class WebSocketBacktestController : ApiController
     {
+        private quantEntities ctx = new quantEntities();
+
         private static List<WebSocket> _sockets = new List<WebSocket>();
         private EngineUtils utils = new EngineUtils();
 
@@ -43,6 +47,17 @@ namespace Quant_BackTest_Backend.Controllers
             string strategy_id = context.QueryString["strategy_id"];
             string time = context.QueryString["time"];
             string user_id = context.QueryString["user_id"];
+
+
+            // backtest item
+            int data_id = 1;
+            float sy = 0;
+            float nsy = 0;
+            float hc = 0;
+            float xp = 0;
+            float sx = 0;
+            string report_path = "";
+
 
 
             DateTime dt = DateTime.ParseExact(time, "yyyy-MM-dd HH:mm:ss",
@@ -87,7 +102,18 @@ namespace Quant_BackTest_Backend.Controllers
 
                     // TODO: 如果输出完成还没有释放，则释放Task
 
+                    if (messageReceived[0].Equals('策')) {   // 退出标志：最后一行输出是夏普比率
+                        System.Diagnostics.Debug.WriteLine(messageReceived);
+                        sy = float.Parse(messageReceived.Substring(6, messageReceived.Length - 6 - 3));  // 还要去掉结尾的%\r\n
+                    }
+                    if (messageReceived[0].Equals('最')) {   // 退出标志：最后一行输出是夏普比率
+                        hc = float.Parse(messageReceived.Substring(7, messageReceived.Length - 7 - 3));
+                    }
+                    if (messageReceived[0].Equals('年')) {   // 退出标志：最后一行输出是夏普比率
+                        nsy = float.Parse(messageReceived.Substring(6, messageReceived.Length - 6 - 3));
+                    }
                     if (messageReceived[0].Equals('夏')) {   // 退出标志：最后一行输出是夏普比率
+                        xp = float.Parse(messageReceived.Substring(6, messageReceived.Length - 6 - 3));
                         System.Diagnostics.Debug.WriteLine("Exit Backtest Runner");
                         break;
                     }
@@ -97,17 +123,33 @@ namespace Quant_BackTest_Backend.Controllers
 
 
             // 回测成功后，保存到mysql、mongodb、file system
+            var new_backtest = new backtest {
+                strategy_id = int.Parse(strategy_id),
+                time = time,
+                data_id = data_id,
+                sy = sy,
+                nsy = nsy,
+                hc = hc,
+                xp = xp,
+                sx = sx,
+                report_path = report_path
+            };
+            ctx.backtest.Add(new_backtest);
+            try {
+                ctx.SaveChanges();
+            }
+            catch (Exception e) {
+                bytes = Encoding.UTF8.GetBytes("保存回测结果时发生错误");
+                buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+            }
 
-            //ctx.strategy.Add(new_backtest);
-            //try {
-            //    ctx.SaveChanges();
-            //}
-            //catch (Exception e) {
-            //    return Helper.JsonConverter.Error(410, "新建策略时发生错误");
-            //}
-            //var data = new {
-            //    strategy_id = new_strategy.strategy_id
-            //};
+            // 发送 backtest id
+            string backtest_id = new_backtest.backtest_id.ToString();
+            var content = WebSocketHelper.string2byteBuffer("backtest_id: " + backtest_id);
+            await socket.SendAsync(content, WebSocketMessageType.Text, true, CancellationToken.None);
+
+
 
 
 

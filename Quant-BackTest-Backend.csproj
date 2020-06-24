@@ -230,8 +230,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\JsonConverter.cs" />
-    <Compile Include="Helper\ValidationHelper.cs" />
+    <Compile Include="ConmonUtils\JsonConverter.cs" />
+    <Compile Include="ConmonUtils\ValidationHelper.cs" />
     <Compile Include="Models\backtest.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
@@ -261,9 +261,9 @@
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserIns.cs" />
-    <Compile Include="MyWebSocket\MyWebSocketHandler.cs" />
     <Compile Include="NameHash\HashOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebSocketUtils\WebSocketHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
