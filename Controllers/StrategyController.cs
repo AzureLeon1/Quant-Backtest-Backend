@@ -10,6 +10,7 @@ using System.Web.Http.Cors;
 using Quant_BackTest_Backend.Models;
 using Quant_BackTest_Backend.Helper;
 using System.Runtime.InteropServices.ComTypes;
+using MySql.Data.MySqlClient;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -17,6 +18,25 @@ namespace Quant_BackTest_Backend.Controllers
     [AllowAnonymous]
 
     public class StrategyController : ApiController {
+
+        [HttpDelete]
+        public object DeleteStrategy(int id) {
+            using (var ctx = new quantEntities()) {
+
+                ctx.Database.ExecuteSqlCommand("delete from backtest where strategy_id=@id", new MySqlParameter("@id", id));
+
+
+                strategy s = ctx.strategy.Find(id);
+                if (s != null) {
+                    ctx.strategy.Remove(s);
+                    ctx.SaveChanges();
+                }
+            }
+            var data = new {
+                id = id
+            };
+            return Helper.JsonConverter.BuildResult(data);
+        }
 
 
         [Route("api/strategy")]
