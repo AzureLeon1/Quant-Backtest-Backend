@@ -55,10 +55,24 @@ namespace Quant_BackTest_Backend.Controllers
                 };
                 return Helper.JsonConverter.BuildResult(data);
             }
-
         }
 
-        
+        [HttpDelete]
+        public object DeleteBacktest(int id) {
+            using (var ctx = new quantEntities()) {
+                backtest b = ctx.backtest.Find(id);
+                if(b != null) {
+                    ctx.backtest.Remove(b);
+                    ctx.SaveChanges();
+                }
+
+            }
+            var data = new {
+                id = id
+            };
+            return Helper.JsonConverter.BuildResult(data);
+        }
+
 
     }
 }
