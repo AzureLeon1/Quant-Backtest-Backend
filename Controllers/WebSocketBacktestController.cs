@@ -99,14 +99,14 @@ namespace Quant_BackTest_Backend.Controllers
 
                     // TODO: 如果输出完成还没有释放，则释放Task
 
-                    if (messageReceived[0].Equals('策')) {   // 退出标志：最后一行输出是夏普比率
+                    if (messageReceived[0].Equals('策')) {  
                         System.Diagnostics.Debug.WriteLine(messageReceived);
                         sy = messageReceived.Substring(6);  // 结尾有%\r\n
                     }
-                    if (messageReceived[0].Equals('最')) {   // 退出标志：最后一行输出是夏普比率
+                    if (messageReceived[0].Equals('最')) {   
                         hc = messageReceived.Substring(7);
                     }
-                    if (messageReceived[0].Equals('年')) {   // 退出标志：最后一行输出是夏普比率
+                    if (messageReceived[0].Equals('年')) {   
                         nsy = messageReceived.Substring(6);
                     }
                     if (messageReceived[0].Equals('夏')) {   // 退出标志：最后一行输出是夏普比率
@@ -151,23 +151,7 @@ namespace Quant_BackTest_Backend.Controllers
 
 
 
-
-
-
-
-                //double sy = 33.33;
-                //double nsy = 44.44;
-                //double hc = 55.55;
-                //double xp = 66.66;
-                //double sx = 77.77;
-                //string text = "{\"sy\":" + sy + ",\"nsy\":" + nsy + ",\"hc\":" + hc + ",\"xp\":" + xp + ",\"sx\":" + sx + "}";
-                //var bytes = Encoding.UTF8.GetBytes(text);
-                //var buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
-                //await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-
-
-
-                //进入一个无限循环，当web socket close是循环结束
+                //进入一个无限循环，当web socket close时循环结束
                 while (true) {
                     //var buffer = new ArraySegment<byte>(new byte[1024]);
                     var receivedResult = await socket.ReceiveAsync(buffer, CancellationToken.None);//对web socket进行异步接收数据
@@ -190,12 +174,7 @@ namespace Quant_BackTest_Backend.Controllers
                     }
                 }
             }
-            
-
-            
-
-
-            
+             
         }
     }
 }

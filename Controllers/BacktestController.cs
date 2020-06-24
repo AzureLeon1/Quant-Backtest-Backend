@@ -50,83 +50,15 @@ namespace Quant_BackTest_Backend.Controllers
                 utils.saveFile(code, path, file);
                 //utils.copyFile(path + @"\" + file, common_path + @"\" + file);
 
-
-
-                // 回测
-
-
-                // 回测成功后，保存到mysql、mongodb、file system
-
-                //ctx.strategy.Add(new_backtest);
-                //try {
-                //    ctx.SaveChanges();
-                //}
-                //catch (Exception e) {
-                //    return Helper.JsonConverter.Error(410, "新建策略时发生错误");
-                //}
                 var data = new {
                     save_file = "ok"
                 };
                 return Helper.JsonConverter.BuildResult(data);
             }
 
-            
-
         }
 
+        
 
-
-        //[Route("api/backtest")]
-        //public async Task ProcessRequest(AspNetWebSocketContext context) {
-        //    string connectionId = context.AnonymousID;
-        //    string code = context.QueryString["code"];
-        //    string strategy_id = context.QueryString["strategy_id"];
-        //    string time = context.QueryString["time"];
-
-        //    var socket = context.WebSocket;
-        //    while (true) {
-        //        var buffer = new ArraySegment<byte>(new byte[1024]);
-        //        var receivedResult = await socket.ReceiveAsync(buffer, CancellationToken.None); // 对web socket进行异步接收数据
-        //        if (receivedResult.MessageType == WebSocketMessageType.Close) // 客户端关闭连接
-        //        {
-        //            await socket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);
-        //            //_resource.FinishOperation(projectId, personId);
-        //            break;
-        //        }
-        //    }
-        //}
-
-           
-
-
-        //private async Task ProcessWebsocketSession(AspNetWebSocketContext context) {
-        //    var ws = context.WebSocket;
-
-        //    new Task(() =>
-        //    {
-        //        var inputSegment = new ArraySegment<byte>(new byte[1024]);
-
-        //        while (true) {
-        //            // MUST read if we want the state to get updated...
-        //            var result = await ws.ReceiveAsync(inputSegment, CancellationToken.None);
-
-        //            if (ws.State != WebSocketState.Open) {
-        //                break;
-        //            }
-        //        }
-        //    }).Start();
-
-        //    while (true) {
-        //        if (ws.State != WebSocketState.Open) {
-        //            break;
-        //        }
-        //        else {
-        //            byte[] binaryData = { 0xde, 0xad, 0xbe, 0xef, 0xca, 0xfe };
-        //            var segment = new ArraySegment<byte>(binaryData);
-        //            await ws.SendAsync(segment, WebSocketMessageType.Binary,
-        //                true, CancellationToken.None);
-        //        }
-        //    }
-        //}
     }
 }
