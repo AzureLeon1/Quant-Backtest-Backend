@@ -51,11 +51,10 @@ namespace Quant_BackTest_Backend.Controllers
 
             // backtest item
             int data_id = 1;
-            float sy = 0;
-            float nsy = 0;
-            float hc = 0;
-            float xp = 0;
-            float sx = 0;
+            var sy = "";
+            var nsy = "";
+            var hc = "";
+            var xp = "";
             string report_path = "";
 
 
@@ -104,16 +103,16 @@ namespace Quant_BackTest_Backend.Controllers
 
                     if (messageReceived[0].Equals('策')) {   // 退出标志：最后一行输出是夏普比率
                         System.Diagnostics.Debug.WriteLine(messageReceived);
-                        sy = float.Parse(messageReceived.Substring(6, messageReceived.Length - 6 - 3));  // 还要去掉结尾的%\r\n
+                        sy = messageReceived.Substring(6);  // 结尾有%\r\n
                     }
                     if (messageReceived[0].Equals('最')) {   // 退出标志：最后一行输出是夏普比率
-                        hc = float.Parse(messageReceived.Substring(7, messageReceived.Length - 7 - 3));
+                        hc = messageReceived.Substring(7);
                     }
                     if (messageReceived[0].Equals('年')) {   // 退出标志：最后一行输出是夏普比率
-                        nsy = float.Parse(messageReceived.Substring(6, messageReceived.Length - 6 - 3));
+                        nsy = messageReceived.Substring(6);
                     }
                     if (messageReceived[0].Equals('夏')) {   // 退出标志：最后一行输出是夏普比率
-                        xp = float.Parse(messageReceived.Substring(6, messageReceived.Length - 6 - 3));
+                        xp = messageReceived.Substring(6);
                         System.Diagnostics.Debug.WriteLine("Exit Backtest Runner");
                         break;
                     }
@@ -131,7 +130,6 @@ namespace Quant_BackTest_Backend.Controllers
                 nsy = nsy,
                 hc = hc,
                 xp = xp,
-                sx = sx,
                 report_path = report_path
             };
             ctx.backtest.Add(new_backtest);
@@ -139,6 +137,7 @@ namespace Quant_BackTest_Backend.Controllers
                 ctx.SaveChanges();
             }
             catch (Exception e) {
+                System.Diagnostics.Debug.WriteLine(e.ToString());
                 bytes = Encoding.UTF8.GetBytes("保存回测结果时发生错误");
                 buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
                 await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);

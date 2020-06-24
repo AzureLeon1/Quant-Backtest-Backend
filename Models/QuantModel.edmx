@@ -13,11 +13,10 @@
           <Property Name="strategy_id" Type="int" />
           <Property Name="time" Type="varchar" MaxLength="255" />
           <Property Name="data_id" Type="int" />
-          <Property Name="sy" Type="float" />
-          <Property Name="nsy" Type="float" />
-          <Property Name="hc" Type="float" />
-          <Property Name="xp" Type="float" />
-          <Property Name="sx" Type="float" />
+          <Property Name="sy" Type="varchar" MaxLength="255" />
+          <Property Name="nsy" Type="varchar" MaxLength="255" />
+          <Property Name="hc" Type="varchar" MaxLength="255" />
+          <Property Name="xp" Type="varchar" MaxLength="255" />
           <Property Name="report_path" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="data">
@@ -129,11 +128,10 @@
           <Property Name="strategy_id" Type="Int32" />
           <Property Name="time" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="data_id" Type="Int32" />
-          <Property Name="sy" Type="Single" />
-          <Property Name="nsy" Type="Single" />
-          <Property Name="hc" Type="Single" />
-          <Property Name="xp" Type="Single" />
-          <Property Name="sx" Type="Single" />
+          <Property Name="sy" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="nsy" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="hc" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="xp" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="report_path" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="data" Relationship="Self.backtest_data_data_id_fk" FromRole="backtest" ToRole="data" />
           <NavigationProperty Name="strategy" Relationship="Self.backtest_strategy_strategy_id_fk" FromRole="backtest" ToRole="strategy" />
@@ -257,7 +255,6 @@
                 <ScalarProperty Name="nsy" ColumnName="nsy" />
                 <ScalarProperty Name="hc" ColumnName="hc" />
                 <ScalarProperty Name="xp" ColumnName="xp" />
-                <ScalarProperty Name="sx" ColumnName="sx" />
                 <ScalarProperty Name="report_path" ColumnName="report_path" />
               </MappingFragment>
             </EntityTypeMapping>

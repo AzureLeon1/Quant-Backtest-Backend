@@ -18,11 +18,10 @@ namespace Quant_BackTest_Backend.Models
         public Nullable<int> strategy_id { get; set; }
         public string time { get; set; }
         public Nullable<int> data_id { get; set; }
-        public Nullable<float> sy { get; set; }
-        public Nullable<float> nsy { get; set; }
-        public Nullable<float> hc { get; set; }
-        public Nullable<float> xp { get; set; }
-        public Nullable<float> sx { get; set; }
+        public string sy { get; set; }
+        public string nsy { get; set; }
+        public string hc { get; set; }
+        public string xp { get; set; }
         public string report_path { get; set; }
     
         public virtual data data { get; set; }
