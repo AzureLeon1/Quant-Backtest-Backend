@@ -24,7 +24,6 @@ namespace Quant_BackTest_Backend.Controllers
     [RoutePrefix("api/wsbacktest")]
     public class WebSocketBacktestController : ApiController
     {
-        private quantEntities ctx = new quantEntities();
 
         private static List<WebSocket> _sockets = new List<WebSocket>();
         private EngineUtils utils = new EngineUtils();
@@ -47,7 +46,6 @@ namespace Quant_BackTest_Backend.Controllers
             string strategy_id = context.QueryString["strategy_id"];
             string time = context.QueryString["time"];
             string user_id = context.QueryString["user_id"];
-
 
             // backtest item
             int data_id = 1;
@@ -73,7 +71,7 @@ namespace Quant_BackTest_Backend.Controllers
 
 
             Task t = new Task(() => {
-                string sArguments = common_path+@"\"+file;
+                string sArguments = common_path + @"\" + file;
                 EngineRunner runner = new EngineRunner(user_id);
                 runner.RunPythonScript(sArguments);
             });
@@ -122,72 +120,82 @@ namespace Quant_BackTest_Backend.Controllers
 
 
             // 回测成功后，保存到mysql、mongodb、file system
-            var new_backtest = new backtest {
-                strategy_id = int.Parse(strategy_id),
-                time = time,
-                data_id = data_id,
-                sy = sy,
-                nsy = nsy,
-                hc = hc,
-                xp = xp,
-                report_path = report_path
-            };
-            ctx.backtest.Add(new_backtest);
-            try {
-                ctx.SaveChanges();
-            }
-            catch (Exception e) {
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                bytes = Encoding.UTF8.GetBytes("保存回测结果时发生错误");
-                buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
-                await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-            }
 
-            // 发送 backtest id
-            string backtest_id = new_backtest.backtest_id.ToString();
-            var content = WebSocketHelper.string2byteBuffer("backtest_id: " + backtest_id);
-            await socket.SendAsync(content, WebSocketMessageType.Text, true, CancellationToken.None);
+            using (var ctx = new quantEntities()) {
+                var new_backtest = new backtest {
+                    strategy_id = int.Parse(strategy_id),
+                    time = time,
+                    data_id = data_id,
+                    sy = sy,
+                    nsy = nsy,
+                    hc = hc,
+                    xp = xp,
+                    report_path = report_path
+                };
 
-
-
-
-
-
-
-            //double sy = 33.33;
-            //double nsy = 44.44;
-            //double hc = 55.55;
-            //double xp = 66.66;
-            //double sx = 77.77;
-            //string text = "{\"sy\":" + sy + ",\"nsy\":" + nsy + ",\"hc\":" + hc + ",\"xp\":" + xp + ",\"sx\":" + sx + "}";
-            //var bytes = Encoding.UTF8.GetBytes(text);
-            //var buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
-            //await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-
-
-
-            //进入一个无限循环，当web socket close是循环结束
-            while (true) {
-                //var buffer = new ArraySegment<byte>(new byte[1024]);
-                var receivedResult = await socket.ReceiveAsync(buffer, CancellationToken.None);//对web socket进行异步接收数据
-                if (receivedResult.MessageType == WebSocketMessageType.Close) {
-                    await socket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);//如果client发起close请求，对client进行ack
-                    _sockets.Remove(socket);
-                    break;
+                ctx.backtest.Add(new_backtest);
+                try {
+                    ctx.SaveChanges();
+                }
+                catch (Exception e) {
+                    System.Diagnostics.Debug.WriteLine(e.ToString());
+                    bytes = Encoding.UTF8.GetBytes("保存回测结果时发生错误");
+                    buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                    await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
                 }
 
-                if (socket.State == System.Net.WebSockets.WebSocketState.Open) {
-                    string recvMsg = Encoding.UTF8.GetString(buffer.Array, 0, receivedResult.Count);
-                    var recvBytes = Encoding.UTF8.GetBytes(recvMsg);
-                    var sendBuffer = new ArraySegment<byte>(recvBytes);
-                    foreach (var innerSocket in _sockets)//当接收到文本消息时，对当前服务器上所有web socket连接进行广播
-                    {
-                        if (innerSocket != socket) {
-                            await innerSocket.SendAsync(sendBuffer, WebSocketMessageType.Text, true, CancellationToken.None);
+                // 发送 backtest id
+                string backtest_id = new_backtest.backtest_id.ToString();
+                var content = WebSocketHelper.string2byteBuffer("backtest_id: " + backtest_id);
+                await socket.SendAsync(content, WebSocketMessageType.Text, true, CancellationToken.None);
+
+
+
+
+
+
+
+                //double sy = 33.33;
+                //double nsy = 44.44;
+                //double hc = 55.55;
+                //double xp = 66.66;
+                //double sx = 77.77;
+                //string text = "{\"sy\":" + sy + ",\"nsy\":" + nsy + ",\"hc\":" + hc + ",\"xp\":" + xp + ",\"sx\":" + sx + "}";
+                //var bytes = Encoding.UTF8.GetBytes(text);
+                //var buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                //await socket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+
+
+
+                //进入一个无限循环，当web socket close是循环结束
+                while (true) {
+                    //var buffer = new ArraySegment<byte>(new byte[1024]);
+                    var receivedResult = await socket.ReceiveAsync(buffer, CancellationToken.None);//对web socket进行异步接收数据
+                    if (receivedResult.MessageType == WebSocketMessageType.Close) {
+                        await socket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);//如果client发起close请求，对client进行ack
+                        _sockets.Remove(socket);
+                        break;
+                    }
+
+                    if (socket.State == System.Net.WebSockets.WebSocketState.Open) {
+                        string recvMsg = Encoding.UTF8.GetString(buffer.Array, 0, receivedResult.Count);
+                        var recvBytes = Encoding.UTF8.GetBytes(recvMsg);
+                        var sendBuffer = new ArraySegment<byte>(recvBytes);
+                        foreach (var innerSocket in _sockets)//当接收到文本消息时，对当前服务器上所有web socket连接进行广播
+                        {
+                            if (innerSocket != socket) {
+                                await innerSocket.SendAsync(sendBuffer, WebSocketMessageType.Text, true, CancellationToken.None);
+                            }
                         }
                     }
                 }
             }
+            
+
+            
+
+
+            
         }
     }
 }

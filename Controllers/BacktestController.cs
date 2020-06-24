@@ -22,7 +22,6 @@ namespace Quant_BackTest_Backend.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [AllowAnonymous]
     public class BacktestController : ApiController {
-        private quantEntities ctx = new quantEntities();
 
         private EngineUtils utils = new EngineUtils();
 
@@ -42,32 +41,36 @@ namespace Quant_BackTest_Backend.Controllers
             // generate report path
             var report_path = "";
 
-            DateTime dt = DateTime.ParseExact(time, "yyyy-MM-dd HH:mm:ss",
+            using (var ctx = new quantEntities()) {
+                DateTime dt = DateTime.ParseExact(time, "yyyy-MM-dd HH:mm:ss",
                                 System.Globalization.CultureInfo.InvariantCulture);
-            string new_time = dt.ToString("yyyyMMddHHmmss");
-            string path = common_path + @"\" + user_id;
-            string file = new_time + ".py";
-            utils.saveFile(code, path, file);
-            //utils.copyFile(path + @"\" + file, common_path + @"\" + file);
+                string new_time = dt.ToString("yyyyMMddHHmmss");
+                string path = common_path + @"\" + user_id;
+                string file = new_time + ".py";
+                utils.saveFile(code, path, file);
+                //utils.copyFile(path + @"\" + file, common_path + @"\" + file);
 
 
 
-            // 回测
+                // 回测
 
 
-            // 回测成功后，保存到mysql、mongodb、file system
+                // 回测成功后，保存到mysql、mongodb、file system
 
-            //ctx.strategy.Add(new_backtest);
-            //try {
-            //    ctx.SaveChanges();
-            //}
-            //catch (Exception e) {
-            //    return Helper.JsonConverter.Error(410, "新建策略时发生错误");
-            //}
-            var data = new {
-                save_file = "ok"
-            };
-            return Helper.JsonConverter.BuildResult(data);
+                //ctx.strategy.Add(new_backtest);
+                //try {
+                //    ctx.SaveChanges();
+                //}
+                //catch (Exception e) {
+                //    return Helper.JsonConverter.Error(410, "新建策略时发生错误");
+                //}
+                var data = new {
+                    save_file = "ok"
+                };
+                return Helper.JsonConverter.BuildResult(data);
+            }
+
+            
 
         }
 

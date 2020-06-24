@@ -257,6 +257,7 @@
     <Compile Include="Models\strategy.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StrategyResult.cs" />
     <Compile Include="Models\user.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>

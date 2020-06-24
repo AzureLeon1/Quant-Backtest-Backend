@@ -19,7 +19,6 @@ namespace Quant_BackTest_Backend.Controllers
     [RoutePrefix("api/Register")]
     public class RegisterController : ApiController
     {
-        private quantEntities ctx = new quantEntities();
 
         private readonly IMongoCollection<UserIns> _user;
         //private readonly SecurityMaintainLib.SecurityOperatorClass HashTool;
@@ -53,32 +52,36 @@ namespace Quant_BackTest_Backend.Controllers
             var user_id = body["user"];
             var password = body["password"];
 
-            if (ctx.user.Any(_user => _user.user_id == user_id)) {
-                return "fail";  // 用户已存在
+            using (var ctx = new quantEntities()) {
+                if (ctx.user.Any(_user => _user.user_id == user_id)) {
+                    return "fail";  // 用户已存在
+                }
+
+                var new_user = new user {
+                    user_id = user_id,
+                    password = password
+                };
+                ctx.user.Add(new_user);
+
+                ValidationHelper.safeSaveChanges(ctx);
+                return "success";
+
+                //var filter = Builders<UserIns>.Filter.Eq("User", userInfo.User);
+                //var checkUser = _user.Find(filter).FirstOrDefault();
+                //if (checkUser != null)  // 用户名已经存在
+                //    return "userExist";
+                //string hashName = NameHashTool.HashGivenString(userInfo.User);
+                ////HashTool.HashNameAndPassword(hashName, userInfo.Password, out string hashCode);
+                ////userInfo.Password = hashCode;
+                //_user.InsertOne(userInfo);
+                //checkUser = _user.Find(filter).FirstOrDefault();
+                //if (checkUser == null)
+                //    return "fail";
+                //else
+                //    return "success";
             }
 
-            var new_user = new user {
-                user_id = user_id,
-                password = password
-            };
-            ctx.user.Add(new_user);
 
-            ValidationHelper.safeSaveChanges(ctx);
-            return "success";
-
-            //var filter = Builders<UserIns>.Filter.Eq("User", userInfo.User);
-            //var checkUser = _user.Find(filter).FirstOrDefault();
-            //if (checkUser != null)  // 用户名已经存在
-            //    return "userExist";
-            //string hashName = NameHashTool.HashGivenString(userInfo.User);
-            ////HashTool.HashNameAndPassword(hashName, userInfo.Password, out string hashCode);
-            ////userInfo.Password = hashCode;
-            //_user.InsertOne(userInfo);
-            //checkUser = _user.Find(filter).FirstOrDefault();
-            //if (checkUser == null)
-            //    return "fail";
-            //else
-            //    return "success";
         }
 
     }

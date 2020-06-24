@@ -18,10 +18,6 @@ namespace Quant_BackTest_Backend.Controllers
     [RoutePrefix("api/Login")]
     public class LoginController : ApiController
     {
-
-        private quantEntities ctx = new quantEntities();
-
-
         private readonly IMongoCollection<UserIns> _user;
         //private readonly SecurityMaintainLib.SecurityOperatorClass HashTool;
         private readonly NameHash.HashOperator NameHashTool;
@@ -42,25 +38,29 @@ namespace Quant_BackTest_Backend.Controllers
             var user_id = body["user"];
             var passord = body["password"];
 
-            var q = ctx.user.Where(_user => _user.user_id == user_id);
-            if (!q.Any()) {
-                return "fail";
-            }
-            user user = q.Single();
-            if (user.password.Equals(passord)) {
-                return "success";
-            }
-            else {
-                return "fail";
+            using (var ctx = new quantEntities()) {
+                var q = ctx.user.Where(_user => _user.user_id == user_id);
+                if (!q.Any()) {
+                    return "fail";
+                }
+                user user = q.Single();
+                if (user.password.Equals(passord)) {
+                    return "success";
+                }
+                else {
+                    return "fail";
+                }
+
+                //var filter = Builders<UserIns>.Filter.Eq("User", userInfo.User);
+                //Console.WriteLine(userInfo.User);
+                //var checkUser = _user.Find(filter).FirstOrDefault();
+                //if (checkUser != null && checkUser.Password==userInfo.Password)  // 用户名不存在或密码错误
+                //    return "success";
+                //else
+                //    return "fail";
             }
 
-            //var filter = Builders<UserIns>.Filter.Eq("User", userInfo.User);
-            //Console.WriteLine(userInfo.User);
-            //var checkUser = _user.Find(filter).FirstOrDefault();
-            //if (checkUser != null && checkUser.Password==userInfo.Password)  // 用户名不存在或密码错误
-            //    return "success";
-            //else
-            //    return "fail";
+
         }
     }
 }
