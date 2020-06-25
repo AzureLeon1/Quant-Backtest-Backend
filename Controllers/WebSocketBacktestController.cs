@@ -16,6 +16,8 @@ using NetMQ.Sockets;
 using Quant_BackTest_Backend.BackTestEngine;
 using Quant_BackTest_Backend.Models;
 using Quant_BackTest_Backend.WebSocketUtils;
+using WordReportModule;
+using MongoDB.Driver;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -28,7 +30,15 @@ namespace Quant_BackTest_Backend.Controllers
         private static List<WebSocket> _sockets = new List<WebSocket>();
         private EngineUtils utils = new EngineUtils();
 
+        private readonly IMongoCollection<StrategyInMongo> _strategy_code;
+
         string common_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\examples";
+
+        public WebSocketBacktestController() {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("quant");
+            _strategy_code = database.GetCollection<StrategyInMongo>("strategy_code");
+        }
 
         [Route]
         [HttpGet]
@@ -119,7 +129,15 @@ namespace Quant_BackTest_Backend.Controllers
             }
 
 
-            // 回测成功后，保存到mysql、mongodb、file system
+            // 回测成功后，保存到mysql、file system
+            var filter = Builders<StrategyInMongo>.Filter.Eq("StrategyId", strategy_id);
+            var checkCode = _strategy_code.Find(filter).FirstOrDefault();
+
+            var code = "";
+            if (checkCode != null) {
+                code = checkCode.Code;
+            }
+            WordFileOperator.CreateReport(code, time);
 
             using (var ctx = new quantEntities()) {
                 var new_backtest = new backtest {
