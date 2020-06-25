@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quant-BackTest-Backend", "Q
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordReportModule", "..\WordReportModule\WordReportModule.csproj", "{B341F952-BAB9-417B-8BF2-943D115D5C53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFileModule", "..\DataFileModule\DataFileModule.csproj", "{8F07E44D-2763-47E9-9C3E-B3313DFFF9F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B341F952-BAB9-417B-8BF2-943D115D5C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B341F952-BAB9-417B-8BF2-943D115D5C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B341F952-BAB9-417B-8BF2-943D115D5C53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F07E44D-2763-47E9-9C3E-B3313DFFF9F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F07E44D-2763-47E9-9C3E-B3313DFFF9F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F07E44D-2763-47E9-9C3E-B3313DFFF9F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F07E44D-2763-47E9-9C3E-B3313DFFF9F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

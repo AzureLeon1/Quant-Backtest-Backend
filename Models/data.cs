@@ -22,8 +22,11 @@ namespace Quant_BackTest_Backend.Models
     
         public int data_id { get; set; }
         public string data_path { get; set; }
-        public Nullable<int> data_type { get; set; }
+        public int data_type { get; set; }
         public string user_id { get; set; }
+        public string data_name { get; set; }
+        public string start_time { get; set; }
+        public string end_time { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<backtest> backtest { get; set; }

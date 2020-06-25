@@ -27,6 +27,9 @@
           <Property Name="data_path" Type="varchar" MaxLength="255" />
           <Property Name="data_type" Type="int" />
           <Property Name="user_id" Type="varchar" MaxLength="255" />
+          <Property Name="data_name" Type="varchar" MaxLength="255" />
+          <Property Name="start_time" Type="varchar" MaxLength="255" />
+          <Property Name="end_time" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="strategy">
           <Key>
@@ -144,6 +147,9 @@
           <Property Name="data_path" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="data_type" Type="Int32" />
           <Property Name="user_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="data_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="start_time" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="end_time" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="backtest" Relationship="Self.backtest_data_data_id_fk" FromRole="data" ToRole="backtest" />
           <NavigationProperty Name="user" Relationship="Self.data_user_user_id_fk" FromRole="data" ToRole="user" />
         </EntityType>
@@ -266,6 +272,9 @@
                 <ScalarProperty Name="data_path" ColumnName="data_path" />
                 <ScalarProperty Name="data_type" ColumnName="data_type" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="data_name" ColumnName="data_name" />
+                <ScalarProperty Name="start_time" ColumnName="start_time" />
+                <ScalarProperty Name="end_time" ColumnName="end_time" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

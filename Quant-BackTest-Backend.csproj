@@ -222,6 +222,7 @@
     <Compile Include="BackTestEngine\EngineUtils.cs" />
     <Compile Include="Controllers\BacktestController.cs" />
     <Compile Include="Controllers\CodeController.cs" />
+    <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Models\data.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataResult.cs" />
     <Compile Include="Models\HistoryResult.cs" />
     <Compile Include="Models\QuantModel.Context.cs">
       <AutoGen>True</AutoGen>
