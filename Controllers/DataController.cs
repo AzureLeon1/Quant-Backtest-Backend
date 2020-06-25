@@ -146,5 +146,27 @@ namespace Quant_BackTest_Backend.Controllers
             return new HttpResponseMessage(HttpStatusCode.NotFound);
             
         }
+
+        [HttpDelete]
+        public object DeleteData(int id) {
+            using (var ctx = new quantEntities()) {
+                data d = ctx.data.Find(id);
+                if (d != null) {
+
+                    var data_path = d.data_path;
+                    if(File.Exists(data_path)) {
+                        File.Delete(data_path);
+                    }
+
+                    ctx.data.Remove(d);
+                    ctx.SaveChanges();
+                }
+
+            }
+            var data = new {
+                id = id
+            };
+            return Helper.JsonConverter.BuildResult(data);
+        }
     }
 }
