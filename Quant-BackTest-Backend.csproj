@@ -221,6 +221,7 @@
     <Compile Include="BackTestEngine\EngineRunner.cs" />
     <Compile Include="BackTestEngine\EngineUtils.cs" />
     <Compile Include="Controllers\BacktestController.cs" />
+    <Compile Include="Controllers\CodeController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Models\strategy.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StrategyInMongo.cs" />
     <Compile Include="Models\StrategyResult.cs" />
     <Compile Include="Models\user.cs">
       <DependentUpon>QuantModel.tt</DependentUpon>

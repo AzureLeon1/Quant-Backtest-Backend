@@ -69,9 +69,6 @@ namespace Quant_BackTest_Backend.Controllers
                 };
                 return Helper.JsonConverter.BuildResult(data);
             }
-
-            
-
         }
 
         [Route("api/all_strategy")]

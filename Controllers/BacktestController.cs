@@ -25,7 +25,15 @@ namespace Quant_BackTest_Backend.Controllers
 
         private EngineUtils utils = new EngineUtils();
 
+        private readonly IMongoCollection<StrategyInMongo> _strategy_code;
+
         string common_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\examples";
+
+        public BacktestController() {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("quant");
+            _strategy_code = database.GetCollection<StrategyInMongo>("strategy_code");
+        }
 
         // 只用于存储code
         [Route("api/backtest")]
@@ -35,7 +43,7 @@ namespace Quant_BackTest_Backend.Controllers
             var body = JsonConverter.Decode(json);
 
             var code = body["code"];
-            var strategy_id = body["strategy_id"];
+            var strategy_id = int.Parse(body["strategy_id"]);
             var time = body["time"];
             var user_id = body["user_id"];
             // generate report path
@@ -50,6 +58,24 @@ namespace Quant_BackTest_Backend.Controllers
                 utils.saveFile(code, path, file);
                 //utils.copyFile(path + @"\" + file, common_path + @"\" + file);
 
+                // save to mongodb
+                //string hashName = NameHashTool.HashGivenString(strategy_id);
+                //HashTool.HashNameAndPassword(hashName, userInfo.Password, out string hashCode);
+                //userInfo.Password = hashCode;
+                var strategy_code = new StrategyInMongo {
+                    StrategyId = strategy_id,
+                    Code = code
+                };
+                var filter = Builders<StrategyInMongo>.Filter.Eq("StrategyId", strategy_code.StrategyId);
+                var checkCode = _strategy_code.Find(filter).FirstOrDefault();
+                if (checkCode != null) {  // 策略代码已经存在
+                    var update = Builders<StrategyInMongo>.Update.Set("Code", code);
+                    _strategy_code.UpdateOne(filter, update);
+                }
+                else {
+                    _strategy_code.InsertOne(strategy_code);
+                }
+                //checkCode = _strategy_code.Find(filter).FirstOrDefault();
                 var data = new {
                     save_file = "ok"
                 };
