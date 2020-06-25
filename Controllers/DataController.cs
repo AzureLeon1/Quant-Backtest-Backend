@@ -28,6 +28,8 @@ namespace Quant_BackTest_Backend.Controllers
 
         private EngineUtils utils = new EngineUtils();
 
+        string path = @"C:\Users\leon\NET_FINAL\strategy_backtest\tests\test_data\stock";
+
         [Route("api/data")]
         [HttpPost]
         public object GetData(object json) {
@@ -59,6 +61,60 @@ namespace Quant_BackTest_Backend.Controllers
                 return Helper.JsonConverter.BuildResult(data);
 
             }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("api/data/upload")]
+        public async Task<HttpResponseMessage> Upload()
+        {
+            var user_id = HttpContext.Current.Request.Params["user_id"];
+            var data_name = HttpContext.Current.Request.Params["data_name"];
+            var start_time = HttpContext.Current.Request.Params["start_time"];
+            var end_time = HttpContext.Current.Request.Params["end_time"];
+
+            if (!Request.Content.IsMimeMultipartContent()) {
+                return Request.CreateResponse(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
+
+            string save_path = "";
+            foreach (var stream in filesReadToProvider.Contents) {
+                // Getting of content as byte[], picture name and picture type
+                var fileBytes = await stream.ReadAsByteArrayAsync();
+                var fileName = stream.Headers.ContentDisposition.FileName;
+                //var contentType = stream.Headers.ContentType.MediaType;
+
+                if (fileName == null)
+                    continue;
+                else
+                    fileName = fileName.Trim('\"');
+
+                string dir = path + @"\" + user_id;
+                if (!Directory.Exists(dir)) {
+                    Directory.CreateDirectory(dir);
+                }
+                save_path = dir + @"\" + fileName;
+                if (File.Exists(save_path)) {
+                    return Request.CreateResponse(HttpStatusCode.Conflict);
+                }
+                File.WriteAllBytes(save_path, fileBytes);
+            }
+
+            var new_data = new data {
+                data_type = 1,
+                user_id = user_id,
+                data_path = save_path,
+                data_name = data_name,
+                start_time = start_time,
+                end_time = end_time
+            };
+            using (var ctx = new quantEntities()) {
+                ctx.data.Add(new_data);
+                ctx.SaveChanges();
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, new_data.data_id);
         }
     }
 }
