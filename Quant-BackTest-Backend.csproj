@@ -48,6 +48,10 @@
     <Reference Include="AsyncIO, Version=0.1.69.0, Culture=neutral, PublicKeyToken=44a94435bd6f33f8, processorArchitecture=MSIL">
       <HintPath>packages\AsyncIO.0.1.69\lib\net40\AsyncIO.dll</HintPath>
     </Reference>
+    <Reference Include="CommonUtils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d69cab2f5d06f7f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\CommonUtils\v4.0_1.0.0.0__d69cab2f5d06f7f4\CommonUtils.dll</HintPath>
+    </Reference>
     <Reference Include="Crc32C.NET, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Crc32C.NET.1.0.5.0\lib\net20\Crc32C.NET.dll</HintPath>
     </Reference>
@@ -376,6 +380,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebSocketUtils\WebSocketUtils.csproj">
+      <Project>{49554def-765f-45b3-9e68-7a0bbcb45681}</Project>
+      <Name>WebSocketUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WordReportModule\WordReportModule.csproj">
       <Project>{b341f952-bab9-417b-8bf2-943d115d5c53}</Project>
       <Name>WordReportModule</Name>

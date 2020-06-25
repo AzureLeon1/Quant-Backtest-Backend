@@ -8,7 +8,7 @@ using System;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Quant_BackTest_Backend.Models;
-using Quant_BackTest_Backend.Helper;
+//using Quant_BackTest_Backend.Helper;
 using System.Runtime.InteropServices.ComTypes;
 using System.Net.WebSockets;
 using System.Web.WebSockets;
@@ -18,6 +18,7 @@ using System.Web;
 using Quant_BackTest_Backend.BackTestEngine;
 using System.IO;
 using System.Net.Http.Headers;
+using CommonUtils;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -119,6 +120,7 @@ namespace Quant_BackTest_Backend.Controllers
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
             return response;
         }
+
 
 
     }
