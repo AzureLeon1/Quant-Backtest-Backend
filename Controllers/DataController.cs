@@ -116,5 +116,35 @@ namespace Quant_BackTest_Backend.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.OK, new_data.data_id);
         }
+
+        // GET: api/data/download
+        [HttpPost]
+        [Route("api/data/download")]
+        public HttpResponseMessage GetFile(object json) {
+            var body = JsonConverter.Decode(json);
+            int data_id = int.Parse(body["data_id"]);
+
+            var data_path = "";
+            using (var ctx = new quantEntities()) {
+                var d = ctx.data.Where(a => a.data_id == data_id).Single();
+                data_path = d.data_path;
+            }
+
+            if (data_path != "") {
+                var stream = new FileStream(data_path, FileMode.Open, FileAccess.Read);
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) {
+                    Content = new StreamContent(stream)
+                };
+                response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+                var temp = data_path.Split('\\');
+                string file_name = temp[temp.Length - 1];
+                response.Content.Headers.ContentDisposition.FileName = file_name;
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                return response;
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            
+        }
     }
 }
