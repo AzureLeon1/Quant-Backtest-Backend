@@ -33,6 +33,7 @@ namespace Quant_BackTest_Backend.Controllers
         private readonly IMongoCollection<StrategyInMongo> _strategy_code;
 
         string common_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\examples";
+        string report_save_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\word_report";
 
         public WebSocketBacktestController() {
             var client = new MongoClient("mongodb://localhost:27017");
@@ -129,16 +130,8 @@ namespace Quant_BackTest_Backend.Controllers
             }
 
 
+
             // 回测成功后，保存到mysql、file system
-            var filter = Builders<StrategyInMongo>.Filter.Eq("StrategyId", strategy_id);
-            var checkCode = _strategy_code.Find(filter).FirstOrDefault();
-
-            var code = "";
-            if (checkCode != null) {
-                code = checkCode.Code;
-            }
-            WordFileOperator.CreateReport(code, time);
-
             using (var ctx = new quantEntities()) {
                 var new_backtest = new backtest {
                     strategy_id = int.Parse(strategy_id),
@@ -167,6 +160,16 @@ namespace Quant_BackTest_Backend.Controllers
                 var content = WebSocketHelper.string2byteBuffer("backtest_id: " + backtest_id);
                 await socket.SendAsync(content, WebSocketMessageType.Text, true, CancellationToken.None);
 
+
+                // save word report
+                var filter = Builders<StrategyInMongo>.Filter.Eq("StrategyId", strategy_id);
+                var checkCode = _strategy_code.Find(filter).FirstOrDefault();
+                var code = "";
+                if (checkCode != null) {
+                    code = checkCode.Code;
+                }
+                string file_path = report_save_path + @"\" + backtest_id + @".docx";
+                WordFileOperator.CreateReport(code, time, file_path);
 
 
                 //进入一个无限循环，当web socket close时循环结束

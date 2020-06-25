@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Web;
 using Quant_BackTest_Backend.BackTestEngine;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -28,6 +30,8 @@ namespace Quant_BackTest_Backend.Controllers
         private readonly IMongoCollection<StrategyInMongo> _strategy_code;
 
         string common_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\examples";
+
+        string report_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\word_report";
 
         public BacktestController() {
             var client = new MongoClient("mongodb://localhost:27017");
@@ -97,6 +101,23 @@ namespace Quant_BackTest_Backend.Controllers
                 id = id
             };
             return Helper.JsonConverter.BuildResult(data);
+        }
+
+        // GET: api/report/download?fileName=1
+        [HttpPost]
+        [Route("api/report/download")]
+        public HttpResponseMessage GetFile(object json) {
+            var body = JsonConverter.Decode(json);
+            int backtest_id = int.Parse(body["backtest_id"]);
+            string file_name = backtest_id.ToString() + ".docx";
+            var stream = new FileStream(report_path + @"\" + file_name, FileMode.Open, FileAccess.Read);
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) {
+                Content = new StreamContent(stream)
+            };
+            response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+            response.Content.Headers.ContentDisposition.FileName = file_name;
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            return response;
         }
 
 
