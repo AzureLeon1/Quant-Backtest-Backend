@@ -384,14 +384,25 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebSocketUtils\WebSocketUtils.csproj">
-      <Project>{49554def-765f-45b3-9e68-7a0bbcb45681}</Project>
-      <Name>WebSocketUtils</Name>
+    <ProjectReference Include="..\WebsocketUtils\WebsocketUtils.csproj">
+      <Project>{ed05072f-d390-43a6-99e1-3ba870f84fb2}</Project>
+      <Name>WebsocketUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\WordReportModule\WordReportModule.csproj">
       <Project>{b341f952-bab9-417b-8bf2-943d115d5c53}</Project>
       <Name>WordReportModule</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="PasswordEncryptorLib">
+      <Guid>{856FB2FD-CCEC-4A29-A9AD-F97ED2D16007}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

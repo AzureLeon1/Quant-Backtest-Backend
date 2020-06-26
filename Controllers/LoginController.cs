@@ -13,6 +13,7 @@ using Quant_BackTest_Backend.Helper;
 
 namespace Quant_BackTest_Backend.Controllers
 {
+    
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [AllowAnonymous]
     [RoutePrefix("api/Login")]
@@ -21,6 +22,8 @@ namespace Quant_BackTest_Backend.Controllers
         private readonly IMongoCollection<UserIns> _user;
         //private readonly SecurityMaintainLib.SecurityOperatorClass HashTool;
         private readonly NameHash.HashOperator NameHashTool;
+
+        private PasswordEncryptorLib.EncryptorClass encryptor;
 
         public LoginController() {
             var client = new MongoClient("mongodb://localhost:27017");
@@ -36,7 +39,7 @@ namespace Quant_BackTest_Backend.Controllers
             var body = JsonConverter.Decode(json);
 
             var user_id = body["user"];
-            var passord = body["password"];
+            var password = body["password"];
 
             using (var ctx = new quantEntities()) {
                 var q = ctx.user.Where(_user => _user.user_id == user_id);
@@ -44,7 +47,12 @@ namespace Quant_BackTest_Backend.Controllers
                     return "fail";
                 }
                 user user = q.Single();
-                if (user.password.Equals(passord)) {
+
+                string hash_passord = "";
+                encryptor = new PasswordEncryptorLib.EncryptorClass();
+                encryptor.HashNameAndPassword(user_id, password, out hash_passord);
+
+                if (user.password.Equals(hash_passord) || user.password.Equals(password)) {
                     return "success";
                 }
                 else {

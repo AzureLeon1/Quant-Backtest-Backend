@@ -11,6 +11,7 @@ using System.Web.Http.Cors;
 using Quant_BackTest_Backend.Models;
 using MongoDB.Bson.IO;
 using Quant_BackTest_Backend.Helper;
+//using PEncryptor.Interop;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -23,6 +24,9 @@ namespace Quant_BackTest_Backend.Controllers
         private readonly IMongoCollection<UserIns> _user;
         //private readonly SecurityMaintainLib.SecurityOperatorClass HashTool;
         private readonly NameHash.HashOperator NameHashTool;
+
+        private PasswordEncryptorLib.EncryptorClass encryptor;
+
         //public class UserIns {
         //    [BsonId]
         //    [BsonRepresentation(BsonType.ObjectId)]
@@ -57,9 +61,13 @@ namespace Quant_BackTest_Backend.Controllers
                     return "fail";  // 用户已存在
                 }
 
+                string hash_passord = "";
+                encryptor = new PasswordEncryptorLib.EncryptorClass();
+                encryptor.HashNameAndPassword(user_id, password, out hash_passord);
+
                 var new_user = new user {
                     user_id = user_id,
-                    password = password
+                    password = hash_passord
                 };
                 ctx.user.Add(new_user);
 
