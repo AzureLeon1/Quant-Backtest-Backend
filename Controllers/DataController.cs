@@ -18,6 +18,7 @@ using System.Web;
 using Quant_BackTest_Backend.BackTestEngine;
 using System.IO;
 using System.Net.Http.Headers;
+using FileManagement;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -29,6 +30,9 @@ namespace Quant_BackTest_Backend.Controllers
         private EngineUtils utils = new EngineUtils();
 
         string path = @"C:\Users\leon\NET_FINAL\strategy_backtest\tests\test_data\stock";
+
+        FileManagement.FileOperator _file;
+
 
         [Route("api/data")]
         [HttpPost]
@@ -160,6 +164,14 @@ namespace Quant_BackTest_Backend.Controllers
 
                     ctx.data.Remove(d);
                     ctx.SaveChanges();
+
+                    
+                    int index = data_path.LastIndexOf('\\');
+                    var dir = data_path.Substring(0, index);
+                    var file_name = data_path.Substring(index + 1);
+
+                    _file = new FileManagement.FileOperator(dir, "");
+                    _file.CleanFiles(file_name);
                 }
 
             }
