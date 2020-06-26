@@ -18,6 +18,7 @@ using Quant_BackTest_Backend.Models;
 using Quant_BackTest_Backend.WebSocketUtils;
 using WordReportModule;
 using MongoDB.Driver;
+using System.Runtime.InteropServices;
 
 namespace Quant_BackTest_Backend.Controllers
 {
@@ -34,6 +35,9 @@ namespace Quant_BackTest_Backend.Controllers
 
         string common_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\examples";
         string report_save_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\word_report";
+
+        //[DllImport("TimeFormatConverter.dll", CallingConvention = CallingConvention.StdCall)]
+        //public static extern string Convert(string origin_time);
 
         public WebSocketBacktestController() {
             var client = new MongoClient("mongodb://localhost:27017");
