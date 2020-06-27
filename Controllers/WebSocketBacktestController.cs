@@ -37,7 +37,7 @@ namespace Quant_BackTest_Backend.Controllers
         string report_save_path = @"C:\Users\leon\NET_FINAL\strategy_backtest\word_report";
 
         [DllImport("TimeFormatConverter.dll", CallingConvention = CallingConvention.StdCall)]
-        public static extern string Convert(string origin_time);
+        public static extern void Convert(string origin_time, StringBuilder sb);
 
         public WebSocketBacktestController() {
             var client = new MongoClient("mongodb://localhost:27017");
@@ -75,6 +75,13 @@ namespace Quant_BackTest_Backend.Controllers
             DateTime dt = DateTime.ParseExact(time, "yyyy-MM-dd HH:mm:ss",
                                 System.Globalization.CultureInfo.InvariantCulture);
             string new_time = dt.ToString("yyyyMMddHHmmss");
+
+            string origin_time = dt.ToString("yyyy-MM-dd HH:mm:ss");
+            StringBuilder sb = new StringBuilder();
+            Convert(origin_time, sb);
+            string new_time_2 = sb.ToString();
+
+
             string path = common_path + @"\" + user_id;
             string file = new_time + ".py";
             //utils.saveFile(code, path, file);
