@@ -80,10 +80,10 @@ namespace Quant_BackTest_Backend.BackTestEngine {
             if (!string.IsNullOrEmpty(e.Data)) {
                 string text = e.Data + Environment.NewLine;
                 AppendText(text);
-
-                
+  
                 System.Diagnostics.Debug.Write("Publisher socket connecting\n");
                 System.Diagnostics.Debug.Write("publish: " + text);
+
                 // 添加到消息队列
                 pubSocket.SendMoreFrame(user_id).SendFrame(text);
                 
@@ -92,7 +92,6 @@ namespace Quant_BackTest_Backend.BackTestEngine {
         public delegate void AppendTextCallback(string text);
         public void AppendText(string text) {
             Console.WriteLine(text);     //此处在控制台输出.py文件print的结果
-            
 
         }
     }
